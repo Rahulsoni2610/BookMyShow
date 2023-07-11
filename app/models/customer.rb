@@ -1,0 +1,13 @@
+class Customer < User 
+   
+end
+
+
+
+
+
+
+
+
+
+
