@@ -1,12 +1,10 @@
 class TheatersController < ApplicationController
-	skip_before_action :customer_authenticate_request
-	before_action :owner_authenticate_request
-	# before_action :find , only: [:destroy,:update]
+	before_action :set_values , only: [:destroy,:update]
+  skip_before_action :customer_check
+
 
 	def index
-		theater = @current_user.theaters 
-
-		render json: theater
+		render json: @current_user.theaters
 	end
 
 	def create
@@ -19,32 +17,24 @@ class TheatersController < ApplicationController
 	end
 
 	def update
-		theater = @current_user.theaters.find(params[:id])
-			if theater.update(set_params)
-				render json: theater 
-			end
-		rescue ActiveRecord::RecordNotFound
-		render json: {error: "Theater not Found for this ID"}
+		return render json: @theater if @theater.update(set_params)
+    render json: @theater.errors.full_messages
 	end
 
 	def destroy
-  	theater = @current_user.theaters.find(params[:id])
-  	if theater.destroy
-			render json: {message: "Theater remove successfuly"}
-		end
-		rescue ActiveRecord::RecordNotFound
-		render json: {error: "Theater not Found for this ID"}
+  	return render json: { message: "Theater remove successfuly" } if @theater.destroy
+		render json: { message: "Theater not removed" }
 	end
 
-  # def find
-	# 	theater = @current_user.theaters.find(params[:id])
-	# 	rescue ActiveRecord::RecordNotFound
-	# 	render json: {error: "Theater not Found for this ID"}
-	# end
 
 	private
 	def set_params
 		params.permit(:name,:location)
 	end
 
+  def set_values
+		@theater = @current_user.theaters.find(params[:id])
+		rescue ActiveRecord::RecordNotFound
+		render json: {error: "Theater not Found for this ID"}
+	end
 end

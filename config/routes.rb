@@ -11,7 +11,7 @@ Rails.application.routes.draw do
 
 
   post "/customers/login", to: "customers#login"
-  resources :customers 
+  resource :customers 
   get "/search", to: "customers#search"
   resources :book_tickets
   get "tickets/search", to: "book_tickets#search"

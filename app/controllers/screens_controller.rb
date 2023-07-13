@@ -1,9 +1,9 @@
 class ScreensController < ApplicationController 
-	skip_before_action :customer_authenticate_request
-	# before_action :find , only: [:destroy, :update ]
+	before_action :set_values , only: [:destroy, :update ]
+	skip_before_action :customer_check
+
 	def index
-		screen = @current_user.screens
-		render json: screen
+		render json: @current_user.screens           
 	end
 
 	def show
@@ -12,42 +12,41 @@ class ScreensController < ApplicationController
 			render json: @theater
 		end
 		rescue NoMethodError 
-			render json: {errors: "NO theater availaible for this id"}
+		render json: {errors: "NO theater availaible for this id"}
 	end
 
 	def create 
-		if @current_user.theaters.find_by(id: params[:theater_id])
-			screen = @current_user.screens.new(set_params)
-			if screen.save   
-				render json: screen
-			else
-				render json: screen.errors.full_messages
-			end
+		theater =	@current_user.theaters.find_by(id: params[:theater_id])
+		return render json: {error: "Theater not found"} unless theater.present?
+	
+		screen = @current_user.screens.new(set_params)
+		if screen.save   
+			render json: screen
 		else
-			render json: {error: "Theater not found"}
-  	end
+			render json: screen.errors.full_messages
+		end
 	end
 
 	def update
-		screen =@current_user.screens.find(params[:id])
-		if screen.update(set_params)
-			render json: screen
-		end
-		rescue ActiveRecord::RecordNotFound  
-		render json: {errors: "NO screen availaible for this id"}
+		return render json: @screen if @screen.update(set_params)
+    render json: @screen.errors.full_messages
+		
 	end
 
   def destroy
-		screen =@current_user.screens.find(params[:id])
-    if screen.destroy
+    if @screen.destroy
 			render json: {message: "Screen deleted successfuly "}
 		end
-		rescue ActiveRecord::RecordNotFound  
-		render json: {errors: "NO screen availaible for this id"}
 	end
 
 	private
 	def set_params
 		params.permit(:name,:total_seats,:theater_id)
 	end
+
+	def set_values
+		@screen =@current_user.screens.find_by(id: params[:id])
+		rescue ActiveRecord::RecordNotFound  
+		render json: {errors: "NO screen availaible for this id"}
+	end		
 end
