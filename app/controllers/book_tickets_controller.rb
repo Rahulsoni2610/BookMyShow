@@ -1,4 +1,4 @@
-class BookTicketsController < ApplicationController	
+class BookTicketsController < ApiController	
   skip_before_action :owner_check
 
   def index
@@ -7,7 +7,7 @@ class BookTicketsController < ApplicationController
   end
 
   def search
-    a_id = params[:alphanumeric_id].strip.present?
+    a_id = params[:alphanumeric_id]
     return render json: {error: "provide details"} unless a_id.present?
 
     a_id = BookTicket.find_by(alphanumeric_id: params[:alphanumeric_id])
@@ -35,8 +35,7 @@ class BookTicketsController < ApplicationController
 	end
 
   def update_seats
-    @seats = Movie.find_by(id: params[:movie_id])
-    @seats = @seats.screen_id
+    @seats = Movie.where(id: params[:movie_id]).first.screen_id
     @screen = Screen.find(@seats)
     @total_seats=@screen.total_seats
     @tickets = @book.total_tickets

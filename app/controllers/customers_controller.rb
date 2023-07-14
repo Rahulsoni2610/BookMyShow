@@ -1,4 +1,4 @@
-class CustomersController < ApplicationController
+class CustomersController < ApiController
   skip_before_action :authenticate_request , only: [:login,:create]
   skip_before_action :owner_check
   skip_before_action :customer_check ,only: [:login, :create]
@@ -7,7 +7,7 @@ class CustomersController < ApplicationController
   def show
     render json: @user
   end
-
+  
   def create
     customer = Customer.new(set_params)
     if customer.save

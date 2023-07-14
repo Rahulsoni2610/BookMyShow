@@ -1,4 +1,4 @@
-class ScreensController < ApplicationController 
+class ScreensController < ApiController 
 	before_action :set_values , only: [:destroy, :update ]
 	skip_before_action :customer_check
 

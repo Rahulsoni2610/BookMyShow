@@ -1,4 +1,4 @@
-class OwnersController < ApplicationController
+class OwnersController < ApiController
   skip_before_action :authenticate_request, only: [:login, :create]
   skip_before_action :owner_check, ecxept: [:index]
   skip_before_action :customer_check
@@ -15,20 +15,20 @@ class OwnersController < ApplicationController
 
   def login
     if owner = Owner.find_by(email: params[:email], password: params[:password])
-			token = jwt_encode(user_id: owner.id)
-			render json: { token: token }, status: :ok
-		else
-			render json: { error: 'Please provide valid Email or password' }
-		end
-	end
+      token = jwt_encode(user_id: owner.id)
+      render json: { token: token }, status: :ok
+    else
+      render json: { error: 'Please provide valid Email or password' }
+    end
+  end
 
-	def index
-		render json: @current_user
-	end
+  def index
+    render json: @current_user
+  end
 
-	private
+  private
 
-	def set_params
-		params.permit(:name, :email, :password, :image)
-	end
+  def set_params
+    params.permit(:name, :email, :password, :image)
+  end
 end

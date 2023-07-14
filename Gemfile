@@ -28,6 +28,11 @@ gem "byebug"
 gem 'cancancan'
 gem 'rubocop-rails',require: false
 
+gem 'activeadmin'
+gem 'sass-rails'
+gem 'devise'
+gem 'draper'
+gem 'pundit'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
