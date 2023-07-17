@@ -1,6 +1,6 @@
 class MoviesController < ApiController
   skip_before_action :customer_check
-  before_action :set_value , only: [:update, :destroy]
+  before_action :set_value, only: [:update, :destroy]
 
   def index
     render json: Movie.all
@@ -8,13 +8,13 @@ class MoviesController < ApiController
 
   def create
     screen = @current_user.screens.find_by(id: params[:screen_id])
-    return render json: {error: 'screen not found'} unless screen.present?
+    return render json: { error: 'screen not found' } unless screen.present?
 
-    movie = Movie.new(set_params)
+    movie = Movie.create(set_params)
     if movie.save
       render json: movie
     else
-      render json: {error: movie.errors.messages} 
+      render json: movie.errors.messages 
     end
   end
   
@@ -25,20 +25,19 @@ class MoviesController < ApiController
 
   def destroy
     if @movie.destroy
-      render json: { message: "movie deleted successfuly" }
+      render json: { message: 'movie deleted successfuly' }
     end
   end
 
   private
+
   def set_params
-    params.permit(:name,:start_date,:end_date,:screen_id )
+    params.permit(:name, :start_date, :end_date, :screen_id )
   end
 
   def set_value
     @movie = Movie.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-    render json: { error: "Check ID ,id not found " }
+    render json: { error: 'Check ID ,id not found' }
   end
-
 end
-   

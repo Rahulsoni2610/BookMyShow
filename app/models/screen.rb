@@ -5,4 +5,7 @@ class Screen < ApplicationRecord
 	validates :name,:total_seats, presence: true
 	validates :total_seats , length: {maximum:40}
 
+	
+ 	# paginates_per 2
+
 end

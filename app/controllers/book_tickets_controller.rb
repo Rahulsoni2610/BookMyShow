@@ -6,18 +6,18 @@ class BookTicketsController < ApiController
    render json: book 
   end
 
-  def search
+  def search_ticket
     a_id = params[:alphanumeric_id]
-    return render json: {error: "provide details"} unless a_id.present?
+    return render json: { error: "provide details" } unless a_id.present?
 
     a_id = BookTicket.find_by(alphanumeric_id: params[:alphanumeric_id])
     unless a_id.nil?
      render json: a_id
     else
-      render json: {errors: "sorry no ticket avaliable for your search"}
+      render json: { errors: "sorry no ticket avaliable for your search" }
     end
     rescue NoMethodError
-    render json: {error: "select field"}
+    render json: { error: "select field" }
   end
 
 	def create 
@@ -28,22 +28,22 @@ class BookTicketsController < ApiController
       if @total_seats > @tickets
         @book.save
         @screen.update(total_seats: @total_seats- @tickets)
-        render json: {message: "tickets booked"}
+        render json: { message: "tickets booked" }
       else 
-        render json: {error: "Oops #{@total_seats} seats available "} 
+        render json: { error: "Oops #{@total_seats} seats available " } 
       end
 	end
 
   def update_seats
     @seats = Movie.where(id: params[:movie_id]).first.screen_id
     @screen = Screen.find(@seats)
-    @total_seats=@screen.total_seats
+    @total_seats = @screen.total_seats
     @tickets = @book.total_tickets
   end
 
   private
 	def set_params
-		params.permit(:total_tickets,:movie_id)
+		params.permit(:total_tickets, :movie_id)
 	end
 
 end

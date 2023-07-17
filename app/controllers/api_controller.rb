@@ -18,11 +18,11 @@ class ApiController < ActionController::API
     end
 
     def owner_check
-      return render json: { message: "Not a Owner" } unless @current_user.type == "Owner" 
+      return render json: { message: "Not a Owner" } unless @current_user.owner?
     end
 
     def customer_check
-      return render json: { message: "Not a customer" } unless @current_user.type == "Customer" 
+      return render json: { message: "Not a customer" } unless @current_user.customer? 
     end
 
     before_action do

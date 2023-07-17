@@ -306,6 +306,7 @@ DEPENDENCIES
   devise
   draper
   jwt
+  kaminari
   puma (~> 5.0)
   pundit
   rails (~> 7.0.6)
