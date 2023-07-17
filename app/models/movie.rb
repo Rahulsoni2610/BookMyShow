@@ -3,7 +3,7 @@ class Movie < ApplicationRecord
   has_many :book_tickets , dependent: :destroy
 
   validates :name, presence: true
-	validates :screen_id , presence: true#, uniqueness: {message: "A movie is alredy scheduled in screen"}, on: :create
+	validates :screen_id , presence: true, uniqueness: {message: "A movie is alredy scheduled in screen"}, on: :create
 
 	before_save :set_date
 
