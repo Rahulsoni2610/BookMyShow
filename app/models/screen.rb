@@ -1,11 +1,12 @@
 class Screen < ApplicationRecord
   belongs_to :theater
-  has_one :movie, dependent: :destroy
+  belongs_to :movie
 
 	validates :name,:total_seats, presence: true
 	validates :total_seats , length: {maximum:40}
+	validates :movie_id , presence: true
+
 
 	
- 	# paginates_per 2
 
 end

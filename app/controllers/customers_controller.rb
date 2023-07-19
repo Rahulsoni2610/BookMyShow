@@ -2,10 +2,9 @@ class CustomersController < ApiController
   skip_before_action :authenticate_request, only: [:create]
   skip_before_action :owner_check
   skip_before_action :customer_check, only: [:create]
-  before_action :set_values, only: [:show, :update]
 
   def show
-    render json: @user
+    render json: @current_user
   end
   
   def create
@@ -34,7 +33,7 @@ class CustomersController < ApiController
   end
   
   def update
-    if @user.update(set_params)
+    if @current_user.update(set_params)
       render json: @user
     else
       render json: @user.errors.full_messages
@@ -45,9 +44,5 @@ class CustomersController < ApiController
 
   def set_params
     params.permit(:name, :email, :password, :image)
-  end
-
-  def set_values
-    @user = @current_user
   end
 end

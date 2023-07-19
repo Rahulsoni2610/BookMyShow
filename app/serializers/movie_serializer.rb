@@ -1,13 +1,7 @@
 class MovieSerializer < ActiveModel::Serializer
-  attributes :id,:name,:start_date,:end_date,:theater,:total_seates
+  attributes :id,:name,:start_date,:end_date
+  has_many :screens
 
-  def total_seates
-    object.screen.total_seats
-  end
-
-
-  def theater
-    object.screen.theater.name
-  end
+ 
 
 end

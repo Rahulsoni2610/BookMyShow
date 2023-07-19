@@ -7,9 +7,6 @@ class MoviesController < ApiController
   end
 
   def create
-    screen = @current_user.screens.find_by(id: params[:screen_id])
-    return render json: { error: 'screen not found' } unless screen.present?
-
     movie = Movie.create(set_params)
     if movie.save
       render json: movie
@@ -32,7 +29,7 @@ class MoviesController < ApiController
   private
 
   def set_params
-    params.permit(:name, :start_date, :end_date, :screen_id )
+    params.permit(:name, :start_date, :end_date)
   end
 
   def set_value

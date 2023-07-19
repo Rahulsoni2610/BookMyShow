@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_17_062817) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_19_053253) do
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -72,7 +72,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_062817) do
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.integer "movie_id", null: false
+    t.integer "theater_id", null: false
     t.index ["movie_id"], name: "index_book_tickets_on_movie_id"
+    t.index ["theater_id"], name: "index_book_tickets_on_theater_id"
     t.index ["user_id"], name: "index_book_tickets_on_user_id"
   end
 
@@ -80,10 +82,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_062817) do
     t.string "name"
     t.datetime "start_date"
     t.datetime "end_date"
-    t.integer "screen_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["screen_id"], name: "index_movies_on_screen_id"
   end
 
   create_table "screens", force: :cascade do |t|
@@ -92,6 +92,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_062817) do
     t.integer "theater_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "movie_id"
+    t.index ["movie_id"], name: "index_screens_on_movie_id"
     t.index ["theater_id"], name: "index_screens_on_theater_id"
   end
 
@@ -116,8 +118,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_062817) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "book_tickets", "movies"
+  add_foreign_key "book_tickets", "theaters"
   add_foreign_key "book_tickets", "users"
-  add_foreign_key "movies", "screens"
+  add_foreign_key "screens", "movies"
   add_foreign_key "screens", "theaters"
   add_foreign_key "theaters", "users"
 end

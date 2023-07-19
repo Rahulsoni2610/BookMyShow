@@ -18,7 +18,7 @@ class ApiController < ActionController::API
     end
 
     def owner_check
-      return render json: { message: "Not a Owner" } unless @current_user.owner?
+      return render json: { message: "Not a Owner" } unless @current_user.owner? 
     end
 
     def customer_check
@@ -28,5 +28,4 @@ class ApiController < ActionController::API
     before_action do
     ActiveStorage::Current.url_options = { protocol: request.protocol, host: request.host, port: request.port }
     end
-
 end

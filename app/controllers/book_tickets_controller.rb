@@ -2,8 +2,10 @@ class BookTicketsController < ApiController
   skip_before_action :owner_check
 
   def index
-   book = @current_user.book_tickets
-   render json: book 
+    book = @current_user.book_tickets
+  return render json: book if book.present?
+   
+   render json: {message: "Nothing in your cart"}
   end
 
   def search_ticket
@@ -20,30 +22,26 @@ class BookTicketsController < ApiController
     render json: { error: "select field" }
   end
 
-	def create 
-    @book = @current_user.book_tickets.new(set_params)
-    return render json: @book.errors.full_messages unless @book.valid?
+	def create
+    screen = Screen.find_by(movie_id:params[:movie_id], theater_id:params[:theater_id])
 
-      update_seats()
-      if @total_seats > @tickets
-        @book.save
-        @screen.update(total_seats: @total_seats- @tickets)
-        render json: { message: "tickets booked" }
-      else 
-        render json: { error: "Oops #{@total_seats} seats available " } 
-      end
+    book = @current_user.book_tickets.new(set_params)
+    return render json: book.errors.full_messages unless book.valid?
+
+    if screen.total_seats > book.total_tickets
+      book.save
+      screen.update(total_seats: screen.total_seats - book.total_tickets)
+      render json: { message: "tickets booked" }
+    else 
+      render json: { error: "Oops #{total_seats} seats available " } 
+    end
+  rescue NoMethodError 
+    render json: { message: "movie is not present in this theater" }
 	end
-
-  def update_seats
-    @seats = Movie.where(id: params[:movie_id]).first.screen_id
-    @screen = Screen.find(@seats)
-    @total_seats = @screen.total_seats
-    @tickets = @book.total_tickets
-  end
 
   private
-	def set_params
-		params.permit(:total_tickets, :movie_id)
-	end
 
+	def set_params
+		params.permit(:total_tickets, :movie_id, :theater_id)
+	end
 end

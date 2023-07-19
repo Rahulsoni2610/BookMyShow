@@ -42,11 +42,11 @@ class ScreensController < ApiController
   private
 
   def set_params
-    params.permit(:name, :total_seats, :theater_id)
+    params.permit(:name, :total_seats, :theater_id, :movie_id)
   end
 
   def set_values
-    @screen = @current_user.screens.find_by(id: params[:id])
+    @screen = @current_user.screens.find(params[:id])
     rescue ActiveRecord::RecordNotFound  
     render json: { errors: 'NO screen availaible for this id' }
   end   
