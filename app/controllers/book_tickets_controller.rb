@@ -1,4 +1,4 @@
-class BookTicketsController < ApiController	
+class BookTicketsController < ApplicationController
   skip_before_action :owner_check
 
   def index
@@ -18,8 +18,6 @@ class BookTicketsController < ApiController
     else
       render json: { errors: "sorry no ticket avaliable for your search" }
     end
-    rescue NoMethodError
-    render json: { error: "select field" }
   end
 
 	def create
@@ -32,11 +30,11 @@ class BookTicketsController < ApiController
       book.save
       screen.update(total_seats: screen.total_seats - book.total_tickets)
       render json: { message: "tickets booked" }
-    else 
-      render json: { error: "Oops #{total_seats} seats available " } 
+    else
+      render json: { error: 'Oops #{total_seats} seats available' }
     end
-  rescue NoMethodError 
-    render json: { message: "movie is not present in this theater" }
+  rescue NoMethodError
+    render json: { message: 'movie is not present in this theater' }
 	end
 
   private

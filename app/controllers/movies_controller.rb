@@ -1,4 +1,4 @@
-class MoviesController < ApiController
+class MoviesController < ApplicationController
   skip_before_action :customer_check
   before_action :set_value, only: [:update, :destroy]
 
@@ -11,7 +11,7 @@ class MoviesController < ApiController
     if movie.save
       render json: movie
     else
-      render json: movie.errors.messages 
+      render json: movie.errors.messages
     end
   end
   
@@ -34,7 +34,5 @@ class MoviesController < ApiController
 
   def set_value
     @movie = Movie.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Check ID ,id not found' }
   end
 end

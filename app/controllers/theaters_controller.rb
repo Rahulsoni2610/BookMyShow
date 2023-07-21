@@ -1,7 +1,6 @@
-class TheatersController < ApiController
+class TheatersController < ApplicationController
   before_action :set_values, only: [:destroy, :update]
   skip_before_action :customer_check
-
 
   def index
     render json: @current_user.theaters
@@ -34,7 +33,5 @@ class TheatersController < ApiController
 
   def set_values
     @theater = @current_user.theaters.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Theater not Found for this ID' }
   end
 end

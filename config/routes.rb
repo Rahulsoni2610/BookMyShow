@@ -17,9 +17,6 @@ Rails.application.routes.draw do
   resources :book_tickets
   get "tickets/search", to: "book_tickets#search_ticket"
 
-  # resources :screens do
-  #   get '/page/:page', action: :index
-  # end
 
 
   
