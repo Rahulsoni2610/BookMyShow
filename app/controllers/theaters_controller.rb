@@ -1,4 +1,4 @@
-class TheatersController < ApplicationController
+class TheatersController < ApiController
   before_action :set_values, only: [:destroy, :update]
   skip_before_action :customer_check
 

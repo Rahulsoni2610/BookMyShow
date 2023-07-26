@@ -1,5 +1,5 @@
-class ScreensController < ApplicationController
-  before_action :set_values, only: [:destroy, :update ]
+class ScreensController < ApiController
+  before_action :set_values, only: [:destroy, :update, :refresh ]
   skip_before_action :customer_check
 
   def index
@@ -36,10 +36,21 @@ class ScreensController < ApplicationController
     end
   end
 
+  def refresh
+    shows = @screen.show
+    return render json: { message: "Screen does not have any show" } unless shows.present?
+  
+    if Time.now.strftime("%H:%M") > shows.end_time
+      @screen.update(total_seats:25)
+      shows.destroy
+      render json: { message:"Screen Refreshed"}
+    end
+  end
+
   private
 
   def set_params
-    params.permit(:name, :total_seats, :theater_id, :movie_id)
+    params.permit(:name, :total_seats, :theater_id)
   end
 
   def set_values

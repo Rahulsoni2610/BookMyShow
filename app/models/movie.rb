@@ -1,6 +1,5 @@
 class Movie < ApplicationRecord
-  has_many :screens
-  has_many :book_tickets, dependent: :destroy
+  has_many :shows ,dependent: :destroy
 
   validates :name, presence: true
 

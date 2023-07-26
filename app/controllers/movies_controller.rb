@@ -1,5 +1,6 @@
-class MoviesController < ApplicationController
+class MoviesController < ApiController
   skip_before_action :customer_check
+  before_action :owner_check, except: [:search_movie]
   before_action :set_value, only: [:update, :destroy]
 
   def index
@@ -24,6 +25,21 @@ class MoviesController < ApplicationController
     if @movie.destroy
       render json: { message: 'movie deleted successfuly' }
     end
+  end
+
+  def search_movie
+    @name = params[:name]
+    return render json: { error: "field can't be blank" } unless @name.present?
+
+    @movie = Movie.where("name like ?", "%"+params[:name]+"%" )
+    date = @movie[0][:end_date]
+    if date > DateTime.now.strftime("%Y/%m?%d")
+      return render json: @movie unless @movie.nil?
+    else
+      render json: { message: "Oops this movie is out of date" }
+    end
+    rescue NoMethodError
+    render json: { error: "Movie not found " }
   end
 
   private

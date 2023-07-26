@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_19_053253) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_26_063955) do
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -71,10 +71,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_19_053253) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
-    t.integer "movie_id", null: false
-    t.integer "theater_id", null: false
-    t.index ["movie_id"], name: "index_book_tickets_on_movie_id"
-    t.index ["theater_id"], name: "index_book_tickets_on_theater_id"
+    t.integer "show_id", null: false
+    t.index ["show_id"], name: "index_book_tickets_on_show_id"
     t.index ["user_id"], name: "index_book_tickets_on_user_id"
   end
 
@@ -92,9 +90,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_19_053253) do
     t.integer "theater_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "movie_id"
-    t.index ["movie_id"], name: "index_screens_on_movie_id"
     t.index ["theater_id"], name: "index_screens_on_theater_id"
+  end
+
+  create_table "shows", force: :cascade do |t|
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "movie_id", null: false
+    t.integer "screen_id", null: false
+    t.index ["movie_id"], name: "index_shows_on_movie_id"
+    t.index ["screen_id"], name: "index_shows_on_screen_id"
   end
 
   create_table "theaters", force: :cascade do |t|
@@ -117,10 +124,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_19_053253) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "book_tickets", "movies"
-  add_foreign_key "book_tickets", "theaters"
+  add_foreign_key "book_tickets", "shows"
   add_foreign_key "book_tickets", "users"
-  add_foreign_key "screens", "movies"
   add_foreign_key "screens", "theaters"
+  add_foreign_key "shows", "movies"
+  add_foreign_key "shows", "screens"
   add_foreign_key "theaters", "users"
 end

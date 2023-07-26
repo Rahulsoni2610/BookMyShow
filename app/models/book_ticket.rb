@@ -1,9 +1,8 @@
 class BookTicket < ApplicationRecord
 	belongs_to :user
-	belongs_to :movie
-	belongs_to :theater
+	belongs_to :show
 
-	validates :total_tickets,:movie_id,numericality: true, presence: true
+	validates :total_tickets, numericality: true, presence: true
 
 	before_save :ticket_id
 

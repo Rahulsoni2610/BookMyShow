@@ -4,5 +4,4 @@ class UserSerializer < ActiveModel::Serializer
   def image
     object.image.url
   end
-  
 end

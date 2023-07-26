@@ -1,11 +1,8 @@
 class BookTicketSerializer < ActiveModel::Serializer
-  attributes :id, :alphanumeric_id, :total_tickets, :movie, :theater
+  attributes :id, :alphanumeric_id, :total_tickets, :screen
+  belongs_to :show
 
-  def movie
-    object.movie.name
-  end
-
-  def theater
-    object.theater.name
+  def screen
+    object.show.screen.name
   end
 end
